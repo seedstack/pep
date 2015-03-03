@@ -1,0 +1,33 @@
+@startuml
+
+== instances ==
+
+Assemble -> AggsAssemblerProvider : dtos(List<Object> dto);
+AggsAssemblerProvider -> ListOfAggregate : to(List<A> aggregates)
+
+== classes ==
+
+Assemble -> AggAssemblerProvider : dto(Object dto)
+AggAssemblerProvider -> AggAssemblerWithRepoProvider : to(Class<? extends AggregateRoot<?>> aggregateClass)
+
+AggsAssemblerProvider -> AggAssemblerWithRepoProvider : to(Class<? extends AggregateRoot<?>> aggregateClass)
+
+AggAssemblerWithRepoProvider -> AggAssemblerWithRepoAndFactProvider : fromRepository()
+AggAssemblerWithRepoAndFactProvider ->  AggregateRoot : orFail()
+AggAssemblerWithRepoAndFactProvider ->  AggregateRoot : thenFromFactory()
+AggAssemblerWithRepoProvider ->  AggregateRoot : fromFactory()
+
+AggAssemblerProvider -> AggregateRoot : to(A aggregate)
+
+== Tuple ==
+
+AggsAssemblerProvider -> ListOfTuple : to(List<Tuple> tuples)
+note left: This is not possible since\n another method with this\n signature already exists
+AggAssemblerProvider -> TupleAggAssemblerWithRepoProvider : to(Tuple aggregateClass)
+
+TupleAggAssemblerWithRepoProvider -> TupleAggAssemblerWithRepoAndFactProvider : fromRepository()
+TupleAggAssemblerWithRepoAndFactProvider ->  Tuple : orFail()
+TupleAggAssemblerWithRepoAndFactProvider ->  Tuple : thenFromFactory()
+TupleAggAssemblerWithRepoProvider ->  Tuple : fromFactory()
+
+@enduml
