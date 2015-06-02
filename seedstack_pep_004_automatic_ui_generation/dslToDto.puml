@@ -1,0 +1,18 @@
+@startuml
+Interfaces -> AssembleSecurely: assembleSecurely()
+AssembleSecurely -> Assemble: assemble()
+Interfaces -> Assemble: assemble()
+
+
+Assemble -> DtoAssemblerProvider : aggregate(AggregateRoot<?> aggregate)
+DtoAssemblerProvider -> Dto : to(Class<D> dtoClass)
+
+Assemble -> DtosAssemblerProvider : aggregates(List<? extends AggregateRoot<?>> aggregate)
+DtosAssemblerProvider -> ListOfDto : to(Class<D> dtoClass);
+
+== Tuple ==
+
+Assemble -> DtoAssemblerProvider : tuple(Tuple aggregate)
+Assemble -> DtosAssemblerProvider : tuples(List<Tuple> aggregate)
+
+@enduml
