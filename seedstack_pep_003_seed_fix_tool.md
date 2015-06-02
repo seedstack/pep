@@ -1,7 +1,7 @@
 PEP: 003  
 Title: SEED fix  
 Author: Pierre Thirouin <pierre.thirouin@ext.mpsa.com>  
-Status: draft  
+Status: accepted  
 
 ## Abstract
 
@@ -86,6 +86,8 @@ Sample:
     - replace
     - flatten-props
 ```
+
+Other formats can be accepted to like TOML.
 
 ### List of transformations
 
