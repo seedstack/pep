@@ -102,24 +102,24 @@ List<Object> dtos = Lists.newArrayList(orderDto, myOrder);
 List<Order> orders = Lists.newArrayList(myOrder, myOrder);
 
 /* Usage */
-Order order1 = assemble().dto(orderDto).to(myOrder);
+Order order1 = merge(orderDto).into(myOrder);
 
 // from factory
-Order order2 = Interfaces.assemble().dto(orderDto).to(Order.class).fromFactory();
+Order order2 = merge(orderDto).into(Order.class).fromFactory();
 
 // list of dto to tuple of aggregates
-Pair<Order, Customer> order3 = assemble().dtos(dtos).to(Tuple.tuple(Order.class, Customer.class)).fromFactory(); 
+Pair<Order, Customer> order3 = merge(dtos).into(Order.class, Customer.class).fromFactory(); 
 
 // list of dtos to list of aggregates
-List<Order> orders2 = assemble().dtos(dtos).to(orders);
+List<Order> orders2 = merge(dtos).to(orders);
 
 // from repo or fact
-Order order4 = assemble().dto(orderDto).to(Order.class).fromRepository().thenFromFactory();
+Order order4 = merge(orderDto).into(Order.class).fromRepository().orFromFactory();
 
 // from repo or fail
 Order order5;
 try {
-    order5 = assemble().dto(orderDto).to(Order.class).fromRepository().orFail();
+    order5 = merge(orderDto).into(Order.class).fromRepository().orFail();
 } catch (AggregateNotFoundException e) {
     e.printStackTrace();
 }
@@ -128,7 +128,7 @@ try {
 **With qualifier**
 
 ```java
-order = assemble().dto(orderDto).to(Order.class)
+order = merge(orderDto).to(Order.class).with(ModelMapper.class)
     .fromRepositories(Names.named("jpa")).thenFromFactories(Names.named("fact1"));
 ```
 
@@ -137,17 +137,13 @@ order = assemble().dto(orderDto).to(Order.class)
 ![Sequence diagram aggregate root to dto](./seedstack_pep_004_automatic_ui_generation/dslToDto.png)
 
 ```java
-OrderDto orderDto1 = assemble().aggregate(myOrder).to(OrderDto.class);
+OrderDto orderDto1 = assemble(myOrder).to(OrderDto.class);
 ```
 
 with tuple:
 
 ```java
-orderDto1 = assemble().tuple(Tuples.create(Order.class, Customer.class)).to(OrderDto.class);
-
-orderDto1 = assemble().tuples(
-        Lists.newArrayList(Tuples.create(order, customer), Tuples.create(order, customer))
-).to(OrderDto.class);
+orderDto1 = assemble(aCustomer, anOrder).to(OrderDto.class);
 ```
 
 ### Matching DTO parameters to factory's methods
