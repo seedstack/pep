@@ -70,7 +70,7 @@ repo, creating from a factory and so on...
 
 **Dto to aggregate**
 
-![Sequence diagram dto to aggregate root](./seedstack_pep_004_automatic_ui_generation/dslToAgg.png)
+![Sequence diagram dto to aggregate root](./pep-004/dslToAgg.png)
 
 ```java
 import static org.seedstack.business.api.interfaces.Interfaces.assemble;
@@ -116,7 +116,7 @@ order = merge(orderDto).to(Order.class).with(ModelMapper.class)
 
 **Aggregate to dto**
 
-![Sequence diagram aggregate root to dto](./seedstack_pep_004_automatic_ui_generation/dslToDto.png)
+![Sequence diagram aggregate root to dto](./pep-004/dslToDto.png)
 
 ```java
 OrderDto orderDto1 = assemble(myOrder).to(OrderDto.class);
