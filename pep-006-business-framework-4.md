@@ -38,7 +38,9 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 
     Optional<A> get(K id);
 
-    Optional<A> update(A aggregate);
+    void add(A aggregate);
+    
+    void update(A aggregate);
 
     boolean remove(A aggregate);
 
