@@ -1,7 +1,7 @@
-PEP: 006
-Title: Business framework 4.0
-Author: Adrien LAUER <adrien.lauer@mpsa.com>  
-Status: draft  
+    PEP: 006
+    Title: Business framework 4.0
+    Author: Adrien LAUER <adrien.lauer@mpsa.com>  
+    Status: draft  
 
 # Abstract
 
