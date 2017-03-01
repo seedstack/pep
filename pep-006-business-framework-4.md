@@ -57,30 +57,30 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 }
 ```
 
-## QueryableRepository
+## MatchingRepository
 
-The `QueryableRepository` adds methods to query aggregates by specification. The `queryKeys()` method return only keys when the whole aggregate is not needed. These methods can be combined with unitary methods from `Repository` to delete or update multiple aggregates. 
+The `MatchingRepository` adds methods to retrieve aggregates (or keys) that match a specification. These methods can be combined with unitary methods from `Repository` to delete or update multiple aggregates. 
 
 ```java
-public interface QueryableRepository<A extends AggregateRoot<K>, K> extends Repository<A, K> {
+public interface MatchingRepository<A extends AggregateRoot<K>, K> extends Repository<A, K> {
 
-    Stream<A> query(Specification<A> specification, Sorting<A> sorting);
+    Stream<A> aggregates(Specification<A> specification, Sorting<A> sorting);
 
-    Stream<K> queryKeys(Specification<A> specification, Sorting<A> sorting);
+    Stream<K> keys(Specification<A> specification, Sorting<A> sorting);
     
 }
 ```
 
 ## RangeRepository
 
-The `RangeRepository` adds overloads of `QueryableRepository` methods that take a `Range` as third parameter to restrict the returned stream to a specific range.
+The `RangeRepository` adds overloads of `MatchingRepository` methods that take a `Range` as third parameter to restrict the returned stream to a specific range.
 
 ```java
-public interface RangeRepository<A extends AggregateRoot<K>, K> extends QueryableRepository<A, K> {
+public interface RangeRepository<A extends AggregateRoot<K>, K> extends MatchingRepository<A, K> {
 
-    Stream<A> query(Specification<A> specification, Sorting<A> sorting, Range range);
+    Stream<A> aggregates(Specification<A> specification, Sorting<A> sorting, Range range);
 
-    Stream<K> queryKeys(Specification<A> specification, Sorting<A> sorting, Range range);
+    Stream<K> keys(Specification<A> specification, Sorting<A> sorting, Range range);
     
 }
 ```
