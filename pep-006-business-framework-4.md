@@ -38,17 +38,18 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 
     Optional<A> get(K id);
 
-    void contains(A aggregate);
+    Optional<A> update(A aggregate);
 
-    void containsKey(K id);
+    boolean remove(A aggregate);
 
-    void remove(A aggregate);
+    boolean contains(A aggregate);
+
+    boolean containsKey(K id);
+
     
-    void removeByKey(K id);
+    boolean removeByKey(K id);
     
-    void update(A aggregate);
-
-    void clear();
+    long clear();
     
     long size();
 
@@ -80,5 +81,26 @@ public interface RangeRepository<A extends AggregateRoot<K>, K> extends Queryabl
 
     Stream<K> queryKeys(Specification<A> specification, Sorting<A> sorting, Range range);
     
+}
+```
+
+## FluentAssembler
+
+### Allow to fail with custom exception
+
+The `orFail()` method of the `FluentAssembler` DSL should has an overload allowing to specify the exception:
+
+```java
+public class SomeClass {
+    @Inject
+    private FluentAssembler fluentAssembler;
+    
+    public void someMethod() {
+        fluentAssembler
+            .merge(myDto)
+            .into(MyAggregate.class)
+            .fromRepository()
+            .orFail(() -> throw new NotFoundException("MyAggregate #" + myDto.getId() + " not found");
+    }
 }
 ```
