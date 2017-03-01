@@ -42,12 +42,11 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 
     boolean remove(A aggregate);
 
+    boolean removeByKey(K id);
+
     boolean contains(A aggregate);
 
-    boolean containsKey(K id);
-
-    
-    boolean removeByKey(K id);
+    boolean containsKey(K id);    
     
     long clear();
     
