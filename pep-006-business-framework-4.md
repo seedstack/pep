@@ -44,11 +44,11 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 
     boolean remove(A aggregate);
 
-    boolean removeByKey(K id);
+    boolean remove(K id);
 
     boolean contains(A aggregate);
 
-    boolean containsKey(K id);    
+    boolean contains(K id);    
     
     long clear();
     
@@ -57,23 +57,27 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 }
 ```
 
-## MatchingRepository
+## SpecificationRepository
 
-The `MatchingRepository` adds methods to retrieve aggregates (or keys) that match a specification. These methods can be combined with unitary methods from `Repository` to delete or update multiple aggregates. 
+The `SpecificationRepository` adds methods to work on aggregates matching specification. These methods can be combined with unitary methods from `Repository` to delete or update multiple aggregates. 
 
 ```java
-public interface MatchingRepository<A extends AggregateRoot<K>, K> extends Repository<A, K> {
+public interface SpecificationRepository<A extends AggregateRoot<K>, K> extends Repository<A, K> {
 
     Stream<A> aggregates(Specification<A> specification, Sorting<A> sorting);
 
     Stream<K> keys(Specification<A> specification, Sorting<A> sorting);
+
+    long remove(Specification<A> specification);
+    
+    long count(Specification<A> specification);
     
 }
 ```
 
 ## RangeRepository
 
-The `RangeRepository` adds overloads of `MatchingRepository` methods that take a `Range` as third parameter to restrict the returned stream to a specific range.
+The `RangeRepository` adds some overloads of `SpecificationRepository` methods that take a `Range` as third parameter to restrict the returned stream to a specific range.
 
 ```java
 public interface RangeRepository<A extends AggregateRoot<K>, K> extends MatchingRepository<A, K> {
