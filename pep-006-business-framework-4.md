@@ -77,7 +77,7 @@ public interface SpecificationRepository<A extends AggregateRoot<K>, K> extends 
 
 ## FluentAssembler
 
-### Make FluentAssembler streamable
+### Make FluentAssembler accept streams
 
 Fluent assembler should be able to use streams instead of lists for assembling multiple aggregates/dtos. Combined with the streaming ability of repositories, this would enable advanced use-cases:
 
@@ -94,7 +94,8 @@ public class SomeClass {
                 .aggregates(CustomerSpecifications.RecentClients, Sorting.Natural)
                 .parallelStream()
                 .filter(customer -> customer.getGender() === CustomerGender.FEMALE))
-            .into(MyAggregate.class);
+            .to(CustomerDTO.class)
+            .collect(toList());
     }
 }
 ```
