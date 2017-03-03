@@ -75,21 +75,29 @@ public interface SpecificationRepository<A extends AggregateRoot<K>, K> extends 
 }
 ```
 
-## RangeRepository
+## FluentAssembler
 
-The `RangeRepository` adds some overloads of `SpecificationRepository` methods that take a `Range` as third parameter to restrict the returned stream to a specific range.
+### Make FluentAssembler streamable
+
+Fluent assembler should be able to use streams instead of lists for assembling multiple aggregates/dtos. Combined with the streaming ability of repositories, this would enable advanced use-cases:
 
 ```java
-public interface RangeRepository<A extends AggregateRoot<K>, K> extends MatchingRepository<A, K> {
-
-    Stream<A> aggregates(Specification<A> specification, Sorting<A> sorting, Range range);
-
-    Stream<K> keys(Specification<A> specification, Sorting<A> sorting, Range range);
+public class SomeClass {
+    @Inject
+    private Repository<Customer, CustomerId> customerRepository;
+    @Inject
+    private FluentAssembler fluentAssembler;
     
+    public void someMethod() {
+        fluentAssembler
+            .assemble(customerRepository
+                .aggregates(CustomerSpecifications.RecentClients, Sorting.Natural)
+                .parallelStream()
+                .filter(customer -> customer.getGender() === CustomerGender.FEMALE))
+            .into(MyAggregate.class);
+    }
 }
 ```
-
-## FluentAssembler
 
 ### Allow to fail with custom exception
 
