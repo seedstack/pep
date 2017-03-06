@@ -99,22 +99,3 @@ public class SomeClass {
     }
 }
 ```
-
-### Allow to fail with custom exception
-
-The `orFail()` method of the `FluentAssembler` DSL should has an overload allowing to specify the exception:
-
-```java
-public class SomeClass {
-    @Inject
-    private FluentAssembler fluentAssembler;
-    
-    public void someMethod() {
-        fluentAssembler
-            .merge(myDto)
-            .into(MyAggregate.class)
-            .fromRepository()
-            .orFail(() -> throw new NotFoundException("MyAggregate #" + myDto.getId() + " not found");
-    }
-}
-```
