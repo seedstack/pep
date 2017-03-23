@@ -99,3 +99,12 @@ public class SomeClass {
     }
 }
 ```
+
+## Assembler interface
+
+Sometimes only one-way assembling is needed. The current `Assembler` interfaces forces to implemented both ways and should be splitted into two separate interfaces: `DTOAssembler` and `AggregateAssembler`.
+
+## Assembler parameters
+
+Parameters for assembler methods should be reversed, with the source as first parameter and the target as second parameter. 
+
