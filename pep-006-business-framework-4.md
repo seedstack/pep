@@ -38,7 +38,7 @@ public interface Repository<A extends AggregateRoot<K>, K> {
 
     void add(A aggregate);
 
-    Stream<A> get(Specification<A> specification, RepositoryOptions... options);
+    Stream<A> get(Specification<A> specification, Options... options);
 
     Optional<A> get(ID id);
 
@@ -103,12 +103,78 @@ Parameters for assembler methods should be reversed, with the source as first pa
 ## Pagination
 
 Pagination should be reworked based on new capabilities of repositories, notably the ability to return streams from specifications.
-A pagination DSL could help developpers to extract a part of the results automatically:
+A pagination DSL could help developpers to extract a part of the results automatically.
+
+### Page pagination
 
 ```java
+public class SomeClass {
     @Inject
     Paginator paginator;
+    @Inject
+    FluentAssembler fluentAssembler.
+    @Inject @Jpa
+    Repository<MyAggregate, String> myRepository;
+        
+    public void someMethod() {        
+        Page<MyDTO> dtoPage = fluentAssembler.assemble(
+            paginator
+                .repository(myRepository)
+                .options(...)
+                .page(7)
+                .size(10)
+                .paginate(someSpec)) // or .paginate()
+            .with(ModelMapper.class)
+            .to(MyDTO.class);
+    }
+}
+```
 
-    Page<MyAggregate> page = paginator.paginate(MyAggregate.class).with(Jpa.class).matching(someSpec).page(7).size(10).assemblingTo(MyDTO.class);
-   Chunk<MyAggregate> chunk = paginator.paginate(repository).matching(someSpec).after("insertDate", lastDateSeenByUI).limit(10);
+### Chunk pagination
+
+```java
+public class SomeClass {
+    @Inject
+    Paginator paginator;
+    @Inject
+    FluentAssembler fluentAssembler.
+    @Inject @Jpa
+    Repository<MyAggregate, String> myRepository;
+        
+    public void someMethod() {        
+        Chunk<MyDTO> dtoChunk = fluentAssembler.assemble(
+            paginator
+                .repository(myRepository)
+                .options(...)
+                .offset(70)
+                .limit(10)
+                .paginate(someSpec)) // or .paginate()
+            .with(ModelMapper.class)
+            .to(MyDTO.class);
+    }
+}
+```
+
+### Key-based chunk pagination
+
+```java
+public class SomeClass {
+    @Inject
+    Paginator paginator;
+    @Inject
+    FluentAssembler fluentAssembler.
+    @Inject @Jpa
+    Repository<MyAggregate, String> myRepository;
+        
+    public void someMethod() {        
+        Chunk<MyDTO> dtoChunk = fluentAssembler.assemble(
+            paginator
+                .repository(myRepository)
+                .options(...)
+                .after("insertDate", someDate).limit(10)
+                .paginate(someSpec)) // .paginate()
+            .with(ModelMapper.class)
+            .to(MyDTO.class);
+    }
+}
 ```
