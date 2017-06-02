@@ -83,7 +83,7 @@ public class SomeClass {
     public void someMethod() {
         fluentAssembler
             .assemble(customerRepository
-                .aggregates(CustomerSpecifications.RecentClients, Sorting.Natural)
+                .get(CustomerSpecifications.RecentClients, Sorting.Natural)
                 .parallelStream()
                 .filter(customer -> customer.getGender() === CustomerGender.FEMALE))
             .to(CustomerDTO.class)
