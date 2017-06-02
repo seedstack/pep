@@ -36,42 +36,34 @@ The proposed interface is the following:
 @DomainRepository
 public interface Repository<A extends AggregateRoot<K>, K> {
 
-    Optional<A> get(K id);
-
     void add(A aggregate);
-    
-    void update(A aggregate);
 
-    boolean remove(A aggregate);
+    Stream<A> get(Specification<A> specification, RepositoryOptions... options);
 
-    boolean remove(K id);
+    Optional<A> get(ID id);
+
+    boolean contains(Specification<A> specification);
+
+    boolean contains(ID id);
 
     boolean contains(A aggregate);
 
-    boolean contains(K id);    
-    
-    long clear();
-    
+    long count(Specification<A> specification);
+
     long size();
 
-}
-```
-
-## SpecificationRepository
-
-The `SpecificationRepository` adds methods to work on aggregates matching specification. These methods can be combined with unitary methods from `Repository` to delete or update multiple aggregates. 
-
-```java
-public interface SpecificationRepository<A extends AggregateRoot<K>, K> extends Repository<A, K> {
-
-    Stream<A> aggregates(Specification<A> specification, Sorting<A> sorting);
-
-    Stream<K> keys(Specification<A> specification, Sorting<A> sorting);
+    boolean isEmpty();
 
     long remove(Specification<A> specification);
-    
-    long count(Specification<A> specification);
-    
+
+    boolean remove(ID id);
+
+    boolean remove(A aggregate);
+
+    void update(A aggregate);
+
+    void clear();
+
 }
 ```
 
@@ -108,3 +100,15 @@ Sometimes only one-way assembling is needed. The current `Assembler` interfaces 
 
 Parameters for assembler methods should be reversed, with the source as first parameter and the target as second parameter. 
 
+## Pagination
+
+Pagination should be reworked based on new capabilities of repositories, notably the ability to return streams from specifications.
+A pagination DSL could help developpers to extract a part of the results automatically:
+
+```java
+    @Inject
+    Paginator paginator;
+
+    Page<MyAggregate> page = paginator.paginate(MyAggregate.class).with(Jpa.class).matching(someSpec).page(7).size(10).assemblingTo(MyDTO.class);
+   Chunk<MyAggregate> chunk = paginator.paginate(repository).matching(someSpec).after("insertDate", lastDateSeenByUI).limit(10);
+```
